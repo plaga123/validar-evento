@@ -1,49 +1,55 @@
 import { useState } from "react";
-import Swal from "sweetalert2";
 
 const API = "https://dev_s4pwaapil.sellatuparley.com";
 
 export const useGet = () => {
   const [loading, setLoading] = useState(false);
-  const getData = async ({ url, api = "API" }) => {
-    try {
-      setLoading(true);
-      const response = await fetch(`${API}/${url}`);
 
-      if (!response.ok) {
-        setLoading(false);
-        throw new Error("Network response was not ok");
-      }
+  const getData = async ({ url }) => {
+    setLoading(true);
+
+    try {
+      const response = await fetch(`${API}/${url}`);
       const data = await response.json();
 
-      if (data?.message != "Codigo Valido!") {
-        setLoading(false);
-        // Swal.fire("", data?.error || "CÓDIGO NO VÁLIDO", "error");
-        Swal.fire({
-          title: "CÓDIGO NO VÁLIDO",
-          text: "Este código ya ha sido usado o no es válido",
-          icon: "error",
-          draggable: true,
-        });
-        return [];
+      if (!response.ok) {
+        return {
+          success: false,
+          status: response.status,
+          message: data?.error || "Error en la petición",
+          data: null,
+        };
       }
 
-      if (data?.message == "Codigo Valido!") {
-        Swal.fire({
-          title: "¡Código válido!",
-          text: "Este código es válido para realizar la compra",
-          icon: "success",
-          draggable: true,
-        });
-      }
-      setLoading(false);
+      console.log(data);
 
-      return data;
-    } catch (e) {
+      if (data?.message !== "Codigo Valido!") {
+        return {
+          success: false,
+          status: response.status,
+          message:
+            data?.message || "Este código ya ha sido usado o no es válido",
+          data,
+        };
+      }
+
+      return {
+        success: true,
+        status: response.status,
+        message: data?.message || "¡Código válido!",
+        data,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        status: null,
+        message: error?.message || "Error de red",
+        data: null,
+      };
+    } finally {
       setLoading(false);
-      return null;
     }
   };
 
-  return { getData };
+  return { getData, loading };
 };

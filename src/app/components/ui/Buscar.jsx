@@ -2,14 +2,13 @@
 
 import { MdOutlineScreenSearchDesktop } from "react-icons/md";
 import { CiBarcode } from "react-icons/ci";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { useGet } from "@/app/hook/useGet";
 import Swal from "sweetalert2";
 
 export const Buscar = ({ landing_id }) => {
-  const { getData } = useGet();
+  const { getData, loading } = useGet();
   const [inputCode, setInputCode] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     if (e) e.preventDefault();
@@ -17,18 +16,36 @@ export const Buscar = ({ landing_id }) => {
     const code = inputCode.trim();
     if (!code) return;
 
-    try {
-      const data = await getData({
-        url: `api/v1/verificarCodigo?landing_id=${landing_id}&codigo=${code}`,
-      });
-    } catch (error) {
+    const response = await getData({
+      url: `api/v1/verificarCodigo?landing_id=${landing_id}&codigo=${code}`,
+    });
+
+    if (!response) {
       Swal.fire({
-        title: "ERROR",
+        title: "Error",
+        text: "No se pudo procesar la solicitud",
         icon: "error",
         draggable: true,
       });
-      console.error("Error fetching data:", error);
+      return;
     }
+
+    if (!response.success) {
+      Swal.fire({
+        title: "ERROR",
+        text: response.message,
+        icon: "error",
+        draggable: true,
+      });
+      return;
+    }
+
+    Swal.fire({
+      title: "¡Código válido para descuento!",
+      text: response.message,
+      icon: "success",
+      draggable: true,
+    });
   };
   return (
     <>
@@ -55,7 +72,7 @@ export const Buscar = ({ landing_id }) => {
                 </div>
                 <button
                   type="submit"
-                  disabled={isLoading || !inputCode}
+                  disabled={loading || !inputCode}
                   className="w-40 py-2 bg-[#003399] hover:bg-[#002673] text-white font-bold rounded-2xl transition-all shadow-lg shadow-blue-100 active:scale-95 flex items-center justify-center gap-2"
                 >
                   <MdOutlineScreenSearchDesktop size={20} />
