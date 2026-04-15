@@ -4,6 +4,7 @@ import { MdOutlineScreenSearchDesktop } from "react-icons/md";
 import { CiBarcode } from "react-icons/ci";
 import { useRef, useState } from "react";
 import { useGet } from "@/app/hook/useGet";
+import Swal from "sweetalert2";
 
 export const Buscar = ({ landing_id }) => {
   const { getData } = useGet();
@@ -21,6 +22,11 @@ export const Buscar = ({ landing_id }) => {
         url: `api/v1/verificarCodigo?landing_id=${landing_id}&codigo=${code}`,
       });
     } catch (error) {
+      Swal.fire({
+        title: "ERROR",
+        icon: "error",
+        draggable: true,
+      });
       console.error("Error fetching data:", error);
     }
   };

@@ -14,7 +14,6 @@ export const useGet = () => {
         setLoading(false);
         throw new Error("Network response was not ok");
       }
-
       const data = await response.json();
 
       if (data?.message != "Codigo Valido!") {
@@ -23,7 +22,7 @@ export const useGet = () => {
         Swal.fire({
           title: "CÓDIGO NO VÁLIDO",
           text: "Este código ya ha sido usado o no es válido",
-          icon: "err",
+          icon: "error",
           draggable: true,
         });
         return [];
