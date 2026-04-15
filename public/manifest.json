@@ -8,14 +8,32 @@
   "theme_color": "#000000",
   "icons": [
     {
-      "src": "/sellatuparley.png",
-      "sizes": "206x182",
-      "type": "image/png"
+      "src": "/sellatuparley192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
     },
     {
-       "src": "/sellatuparley.png",
-      "sizes": "206x182",
-      "type": "image/png"
+      "src": "/sellatuparley512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
+  "screenshots": [
+    {
+       "src": "/sellatuparley512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Vista móvil"
+    },
+    {
+    "src": "/sellatuparley512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Vista escritorio"
     }
   ]
 }

@@ -5,10 +5,12 @@ import { CiBarcode } from "react-icons/ci";
 import { useState } from "react";
 import { useGet } from "@/app/hook/useGet";
 import Swal from "sweetalert2";
+import ScanerQR from "./ScanerQR";
 
 export const Buscar = ({ landing_id }) => {
-  const { getData, loading } = useGet();
   const [inputCode, setInputCode] = useState("");
+  const [showScanner, setShowScanner] = useState(false);
+  const { getData, loading } = useGet();
 
   const handleSubmit = async (e) => {
     if (e) e.preventDefault();
@@ -47,6 +49,14 @@ export const Buscar = ({ landing_id }) => {
       draggable: true,
     });
   };
+
+  // Esta función se ejecuta cuando la cámara detecta algo
+  const handleScanSuccess = (code) => {
+    setInputCode(code);
+    setShowScanner(false); // Cerramos la cámara
+    // Opcional: Ejecutar handleSubmit automáticamente al detectar el código
+    // setTimeout(() => handleSubmit(), 100);
+  };
   return (
     <>
       <main>
@@ -56,11 +66,36 @@ export const Buscar = ({ landing_id }) => {
               <label className="text-[11px] uppercase tracking-widest text-slate-400 ml-1">
                 Ingresar el código
               </label>
+              <button
+                className="absolute inset-y-0 left-0 pl-4 flex items-center text-slate-400"
+                type="button"
+                onClick={() => setShowScanner(!showScanner)}
+              >
+                <CiBarcode size={28} className="bg-red-600" />
+              </button>
               <div className="grid gap-3 justify-items-center">
                 <div className="relative w-full">
-                  <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400">
-                    <CiBarcode size={28} />
-                  </div>
+                  {/* Ícono de disparo de cámara integrado en el input para accesibilidad */}
+
+                  {/* Visor del Escáner */}
+                  {showScanner && (
+                    <div className="mt-2 w-full overflow-hidden rounded-2xl border-2 border-dashed border-slate-200 bg-slate-50 p-2 animate-in fade-in zoom-in">
+                      <div className="flex justify-between items-center mb-2 px-2">
+                        <span className="text-[10px] font-bold text-blue-600 uppercase tracking-tight">
+                          Escaneando...
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => setShowScanner(false)}
+                          className="text-xs text-slate-400 hover:text-red-500"
+                        >
+                          Cerrar Cámara
+                        </button>
+                      </div>
+                      <ScanerQR onScan={handleScanSuccess} />
+                    </div>
+                  )}
+
                   <input
                     type="number"
                     value={inputCode}
