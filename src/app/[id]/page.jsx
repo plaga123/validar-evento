@@ -28,15 +28,15 @@ export default function Page() {
     },
   );
 
-  // if (!landing?.activo) {
-  //   return (
-  //     <div className="flex items-center justify-center min-h-screen px-4">
-  //       <p className="bg-black/50 text-white text-center p-4 rounded-md">
-  //         Esta landing no está disponible en este momento.
-  //       </p>
-  //     </div>
-  //   );
-  // }
+  if (!landing?.activo) {
+    return (
+      <div className="flex items-center justify-center min-h-screen px-4">
+        <p className="bg-black/50 text-white text-center p-4 rounded-md">
+          Esta landing no está disponible en este momento.
+        </p>
+      </div>
+    );
+  }
 
   return (
     <>
