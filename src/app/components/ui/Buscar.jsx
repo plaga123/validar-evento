@@ -64,22 +64,22 @@ export const Buscar = ({ landing_id }) => {
           <form onSubmit={handleSubmit} className="flex flex-col gap-6 ">
             <div className="space-y-3">
               <label className="text-[11px] uppercase tracking-widest text-slate-400 ml-1">
-                Ingresar el código
+                Ingresar el código o escanea el QR
               </label>
-              <button
-                className="absolute inset-y-0 left-0 pl-4 flex items-center text-slate-400"
-                type="button"
-                onClick={() => setShowScanner(!showScanner)}
-              >
-                <CiBarcode size={28} className="bg-red-600" />
-              </button>
               <div className="grid gap-3 justify-items-center">
-                <div className="relative w-full">
+           <div className=" w-full mb-2">
+                  <button
+                    className=" px-4 flex items-center text-slate-600 bg-slate-200 rounded-2xl my-2"
+                    type="button"
+                    onClick={() => setShowScanner(!showScanner)}
+                  >
+                    <CiBarcode size={32} />
+                  </button>
                   {/* Ícono de disparo de cámara integrado en el input para accesibilidad */}
 
                   {/* Visor del Escáner */}
                   {showScanner && (
-                    <div className="mt-2 w-full overflow-hidden rounded-2xl border-2 border-dashed border-slate-200 bg-slate-50 p-2 animate-in fade-in zoom-in">
+                    <div className="my-2 w-full overflow-hidden rounded-2xl border-2 border-dashed border-slate-200 bg-slate-50 p-2 animate-in fade-in zoom-in">
                       <div className="flex justify-between items-center mb-2 px-2">
                         <span className="text-[10px] font-bold text-blue-600 uppercase tracking-tight">
                           Escaneando...
@@ -95,14 +95,14 @@ export const Buscar = ({ landing_id }) => {
                       <ScanerQR onScan={handleScanSuccess} />
                     </div>
                   )}
-
+     
                   <input
                     type="number"
                     value={inputCode}
                     onChange={(e) => setInputCode(e.target.value)}
                     name="codigo"
                     placeholder="Código de descuento"
-                    className="w-full pl-12 pr-6 py-2 placeholder:text-gray-400/80 rounded-2xl bg-slate-100 border-2 border-transparent focus:border-[#003399] focus:bg-white outline-none transition-all"
+                    className="w-full pl-4 py-2 placeholder:text-gray-400/80 rounded-2xl bg-slate-100 border-2 border-transparent focus:border-[#003399] focus:bg-white outline-none transition-all"
                   />
                 </div>
                 <button
