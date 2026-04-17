@@ -1,6 +1,7 @@
 import { useState } from "react";
 
-const API = "https://dev_s4pwaapil.sellatuparley.com";
+// const API = "https://dev_s4pwaapil.sellatuparley.com";
+const API = "https://s4pwaapi.sellatuparley.com";
 
 export const useGet = () => {
   const [loading, setLoading] = useState(false);

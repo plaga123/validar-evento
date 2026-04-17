@@ -4,8 +4,8 @@ import useSWR from "swr";
 import { Buscar } from "../components/ui/Buscar";
 import { Header } from "../components/ui/Header";
 
-const APICMS = "https://dev_s4pwaapil.sellatuparley.com";
-// const APICMS = "https://s4pwaapi.sellatuparley.com";
+// const APICMS = "https://dev_s4pwaapil.sellatuparley.com";
+const APICMS = "https://s4pwaapi.sellatuparley.com";
 
 const fetcher = async (url) => {
   const response = await fetch(url);
