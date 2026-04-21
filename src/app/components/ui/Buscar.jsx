@@ -3,14 +3,14 @@
 import { MdOutlineScreenSearchDesktop } from "react-icons/md";
 import { CiBarcode } from "react-icons/ci";
 import { useState } from "react";
-import { useGet } from "@/app/hook/useGet";
+import { usePost } from "@/app/hook/useGet";
 import Swal from "sweetalert2";
 import ScanerQR from "./ScanerQR";
 
 export const Buscar = ({ landing_id }) => {
   const [inputCode, setInputCode] = useState("");
   const [showScanner, setShowScanner] = useState(false);
-  const { getData, loading } = useGet();
+  const { onPost, loading } = usePost();
 
   const handleSubmit = async (e) => {
     if (e) e.preventDefault();
@@ -18,42 +18,31 @@ export const Buscar = ({ landing_id }) => {
     const code = inputCode.trim();
     if (!code) return;
 
-    const response = await getData({
-      url: `api/v1/verificarCodigo?landing_id=${landing_id}&codigo=${code}`,
+    const response = await onPost({
+      url: `api/v1/verificarCodigo`,
+      obj: { landing_id: landing_id, codigo: code },
     });
 
-    if (!response) {
+    if (!response.message) {
       Swal.fire({
         title: "Error",
-        text: "No se pudo procesar la solicitud",
+        text: response.error || "Error al procesar código",
         icon: "error",
         draggable: true,
       });
-      return;
-    }
-
-    if (!response.success) {
+    } else {
       Swal.fire({
-        title: "ERROR",
+        title: "¡Código válido para descuento!",
         text: response.message,
-        icon: "error",
+        icon: "success",
         draggable: true,
       });
-      return;
     }
-
-    Swal.fire({
-      title: "¡Código válido para descuento!",
-      text: response.message,
-      icon: "success",
-      draggable: true,
-    });
   };
 
-  // Esta función se ejecuta cuando la cámara detecta algo
   const handleScanSuccess = (code) => {
     setInputCode(code);
-    setShowScanner(false); // Cerramos la cámara
+    setShowScanner(false);
     // Opcional: Ejecutar handleSubmit automáticamente al detectar el código
     // setTimeout(() => handleSubmit(), 100);
   };
@@ -67,7 +56,7 @@ export const Buscar = ({ landing_id }) => {
                 Ingresar el código o escanea el QR
               </label>
               <div className="grid gap-3 justify-items-center">
-           <div className=" w-full mb-2">
+                <div className=" w-full mb-2">
                   <button
                     className=" px-4 flex items-center text-slate-600 bg-slate-200 rounded-2xl my-2"
                     type="button"
@@ -95,7 +84,7 @@ export const Buscar = ({ landing_id }) => {
                       <ScanerQR onScan={handleScanSuccess} />
                     </div>
                   )}
-     
+
                   <input
                     type="number"
                     value={inputCode}
